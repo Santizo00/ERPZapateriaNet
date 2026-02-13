@@ -196,3 +196,19 @@ ALTER TABLE CompraDetalle
 ADD CONSTRAINT FK_CompraDetalle_Producto
     FOREIGN KEY (IdProducto) REFERENCES Productos(IdProducto);
 
+
+-- 5. Datos iniciales
+
+-- Insertar rol admin
+INSERT INTO Roles (Nombre, Activo)
+VALUES ('Admin', 1);
+
+-- Insertar usuario admin con password hash (bcrypt de '123456')
+INSERT INTO Usuarios (Username, PasswordHash, IdRol, Activo, FechaCreacion)
+VALUES (
+    'admin',
+    '$2a$11$arh.SW8rpeUQjupDJ04ql.fhm/kmCcTJ/X90gaSdCQzDoxcC8Sq9u',
+    1,
+    1,
+    GETDATE()
+);
