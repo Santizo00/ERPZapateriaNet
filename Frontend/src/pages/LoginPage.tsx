@@ -5,6 +5,10 @@ import Swal from 'sweetalert2'
 import { useAuthStore } from '../stores/authStore'
 import type { LoginRequest } from '../types'
 
+/**
+ * Pagina de login del sistema.
+ * Autentica usuarios y redirige al dashboard.
+ */
 export const LoginPage = () => {
   const navigate = useNavigate()
   const { login, isLoading } = useAuthStore()

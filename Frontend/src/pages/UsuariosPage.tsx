@@ -19,6 +19,10 @@ interface RolItem {
   activo: boolean
 }
 
+/**
+ * Pagina de gestion de usuarios (solo Admin).
+ * Lista, crea, edita y elimina usuarios del sistema.
+ */
 export const UsuariosPage = () => {
   const [usuarios, setUsuarios] = useState<UsuarioItem[]>([])
   const [roles, setRoles] = useState<RolItem[]>([])

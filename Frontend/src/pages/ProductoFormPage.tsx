@@ -15,6 +15,10 @@ interface Producto {
   color?: string
 }
 
+/**
+ * Pagina de formulario para crear/editar productos.
+ * Solo accesible para usuarios con rol Admin.
+ */
 export const ProductoFormPage = () => {
   const navigate = useNavigate()
   const { id } = useParams()

@@ -10,7 +10,10 @@ import { ProductoFormPage } from './pages/ProductoFormPage'
 import { PedidosPage } from './pages/PedidosPage'
 import { UsuariosPage } from './pages/UsuariosPage'
 
-// Componente principal de la aplicación - Define las rutas
+/**
+ * Componente principal de la aplicacion.
+ * Define las rutas y proteccion por autenticacion/roles.
+ */
 function AppContent() {
   const { loadTokenFromStorage, isAuthenticated } = useAuthStore()
 

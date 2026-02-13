@@ -56,6 +56,10 @@ interface DetalleItem {
   subtotal: number
 }
 
+/**
+ * Pagina de gestion de pedidos.
+ * Lista pedidos, muestra detalles y crea nuevos pedidos.
+ */
 export const PedidosPage = () => {
   const { usuario } = useAuthStore()
   const [pedidos, setPedidos] = useState<Pedido[]>([])

@@ -14,6 +14,10 @@ interface Producto {
   stockMinimo: number
 }
 
+/**
+ * Pagina de gestion de productos.
+ * Lista, busca, crea, edita y elimina productos.
+ */
 export const ProductosPage = () => {
   const [productos, setProductos] = useState<Producto[]>([])
   const [loading, setLoading] = useState(true)

@@ -1,6 +1,10 @@
 import { DashboardLayout } from '../components/DashboardLayout'
 import { Footprints } from 'lucide-react'
 
+/**
+ * Pagina principal del dashboard.
+ * Muestra estadisticas y tarjetas de bienvenida.
+ */
 export const DashboardPage = () => {
   return (
     <DashboardLayout title="Inicio">
