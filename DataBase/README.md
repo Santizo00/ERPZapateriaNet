@@ -29,3 +29,10 @@ Este directorio contiene los scripts de SQL Server para el esquema, relaciones e
 
 - No se incluyen datos iniciales por ahora.
 - El esquema esta pensado para SQL Server.
+
+## Documentacion adicional
+
+- [README General](../README.md)
+- [Backend API](../Backend/README.md)
+- [Application Layer](../Backend/ERPZapateria.Application/README.md)
+- [Frontend](../Frontend/README.md)

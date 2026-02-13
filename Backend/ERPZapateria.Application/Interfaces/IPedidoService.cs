@@ -10,4 +10,6 @@ public interface IPedidoService
     
     Task<object?> GetByIdAsync(int id);
 
+    Task<PedidoDetalleResponseDto?> GetDetalleByIdAsync(int id);
+
 }

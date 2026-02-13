@@ -7,7 +7,7 @@ GO
 USE ERPZapateria;
 GO
 
--- 2. Creacion de Tablas
+-- 2. Creacion de tablas
 
 -- Catalogo de roles de acceso
 CREATE TABLE Roles (
@@ -66,7 +66,7 @@ CREATE TABLE Inventario (
     CONSTRAINT UQ_Inventario_Producto UNIQUE (IdProducto)
 );
 
--- Movimientos de entrada y salida
+-- Movimientos de entrada y salida (auditoria de inventario)
 CREATE TABLE MovimientosInventario (
     IdMovimiento INT IDENTITY(1,1) PRIMARY KEY,
     IdProducto INT NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE CompraDetalle (
     Subtotal DECIMAL(18,2) NOT NULL
 );
 
--- Registro simple de eventos
+-- Registro simple de eventos del sistema
 CREATE TABLE Logs (
     IdLog INT IDENTITY(1,1) PRIMARY KEY,
     Nivel NVARCHAR(50),
@@ -199,9 +199,9 @@ ADD CONSTRAINT FK_CompraDetalle_Producto
 
 -- 5. Datos iniciales
 
--- Insertar rol admin
+-- Insertar roles basicos
 INSERT INTO Roles (Nombre, Activo)
-VALUES ('Admin', 1);
+VALUES ('Admin', 1), ('Vendedor', 1);
 
 -- Insertar usuario admin con password hash (bcrypt de '123456')
 INSERT INTO Usuarios (Username, PasswordHash, IdRol, Activo, FechaCreacion)
@@ -212,3 +212,16 @@ VALUES (
     1,
     GETDATE()
 );
+
+-- Insertar categoria por defecto
+INSERT INTO Categorias (Nombre, Activo)
+VALUES ('General', 1);
+
+-- Insertar cliente de prueba
+INSERT INTO Clientes (Nombre, NIT, Email, Telefono, Direccion, Activo, FechaRegistro)
+VALUES ('Cliente General', 'CF', 'cliente@example.com', '1234-5678', 'Ciudad de Guatemala', 1, GETDATE());
+
+-- Insertar cliente de prueba alterno
+INSERT INTO Clientes (Nombre, NIT, Email, Telefono, Direccion, Activo, FechaRegistro)
+VALUES 
+('Cliente Genérico', 'CF', 'cliente@example.com', '1234-5678', 'Ciudad de Guatemala', 1, GETDATE());

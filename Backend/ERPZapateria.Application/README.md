@@ -1,53 +1,59 @@
-﻿# ERPZapateria.Application
+﻿# Application Layer - ERPZapatería
 
-## Descripción
+Capa de aplicación con DTOs (Data Transfer Objects) e interfaces de servicios.
 
-La capa de **Application** es responsable de la lógica de negocio y orquestación de la aplicación. Actúa como intermediario entre la capa de presentación (API) y la capa de acceso a datos (Infrastructure), implementando el patrón de arquitectura limpia.
+---
 
-## Propósito
-
-Este proyecto contiene:
-
-- **DTOs (Data Transfer Objects)**: Objetos de transferencia de datos que definen la estructura de información que viaja entre capas
-- **Interfaces de Servicios**: Contratos que definen las operaciones de negocio disponibles
-- **Respuestas API**: Estructuras estándar para las respuestas de la aplicación
-
-## Estructura del Proyecto
+## 📁 Estructura
 
 ```
-ERPZapateria.Application
+ERPZapateria.Application/
+├── DTOs/
+│   ├── Auth/
+│   │   ├── LoginRequestDto.cs       # username, password
+│   │   ├── LoginResponseDto.cs      # token, usuario
+│   │   └── RegisterRequestDto.cs    # registro de usuario
+│   ├── Producto/
+│   │   ├── ProductoDto.cs           # Lectura
+│   │   └── CreateProductoDto.cs     # Crear/Editar
+│   ├── Pedido/
+│   │   ├── CreatePedidoDto.cs       # Crear pedido
+│   │   ├── PedidoDetalleDto.cs      # Items del pedido
+│   │   ├── PedidoDetalleItemDto.cs  # Respuesta items
+│   │   └── PedidoDetalleResponseDto.cs # Respuesta completa
+│   ├── Usuario/
+│   │   ├── UsuarioDto.cs            # Lectura
+│   │   ├── CreateUsuarioDto.cs      # Crear
+│   │   └── UpdateUsuarioDto.cs      # Editar
+│   ├── Cliente/
+│   │   └── ClienteDto.cs            # Información de cliente
+│   └── Rol/
+│       └── RolDto.cs                # Información de rol
 │
-├── Common
-│   └── ApiResponse.cs              # Clase genérica para respuestas estandarizadas
-│
-├── DTOs
-│   ├── Auth
-│   │   ├── LoginRequestDto.cs      # DTO para solicitudes de login (username y password)
-│   │   └── LoginResponseDto.cs     # DTO para respuestas de autenticación (token y datos usuario)
-│   │
-│   ├── Producto
-│   │   ├── ProductoDto.cs          # DTO principal de productos (lectura/consulta)
-│   │   └── CreateProductoDto.cs    # DTO para crear o actualizar productos
-│   │
-│   └── Pedido
-│       ├── CreatePedidoDto.cs      # DTO para crear pedidos (cliente + lista de productos)
-│       └── PedidoDetalleDto.cs     # DTO para detalles del pedido (producto, cantidad, precio)
-│
-└── Interfaces
-    ├── IAuthService.cs             # Contrato del servicio de autenticación
-    ├── IProductoService.cs         # Contrato del servicio CRUD de productos
-    └── IPedidoService.cs           # Contrato del servicio de creación de pedidos
-
+└── Interfaces/
+    ├── IAuthService.cs              # Autenticación
+    ├── IProductoService.cs          # CRUD productos
+    ├── IPedidoService.cs            # CRUD pedidos
+    ├── IUsuarioService.cs           # CRUD usuarios
+    ├── IClienteService.cs           # CRUD clientes
+    └── IRolService.cs               # Lectura de roles
 ```
 
-## Componentes Principales
+---
 
-### 1. Common
-Contiene clases compartidas y utilidades comunes en toda la aplicación:
-- **ApiResponse<T>**: Wrapper genérico para estandarizar las respuestas de la API
+## 🎯 Propósito
 
-### 2. DTOs (Data Transfer Objects)
-Objetos que transportan datos entre procesos, organizados por dominio:
+- **DTOs**: Estructuran datos entre API y clientes
+- **Interfaces**: Definen contratos que cumplen los servicios
+
+---
+
+## 📚 Documentación Adicional
+
+- [README General](../../README.md)
+- [Backend API](../ERPZapateria.API/README.md)
+- [Base de Datos](../../DataBase/README.md)
+- [Frontend](../../Frontend/README.md)
 
 #### Auth
 - Autenticación y autorización de usuarios
