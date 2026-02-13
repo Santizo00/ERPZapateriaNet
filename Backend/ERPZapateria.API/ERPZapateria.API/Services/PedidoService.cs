@@ -6,34 +6,20 @@ using System.Data;
 namespace ERPZapateria.API.Services;
 
 /// <summary>
-/// Service for managing orders (Pedidos).
-/// Handles order creation with inventory management through stored procedures and order retrieval.
+/// Servicio de gestion de pedidos.
 /// </summary>
 public class PedidoService : IPedidoService
 {
     private readonly IDbConnection _connection;
 
-    /// <summary>Initializes a new instance of the PedidoService class.</summary>
-    /// <param name="connection">The database connection dependency.</param>
     public PedidoService(IDbConnection connection)
     {
         _connection = connection;
     }
 
     /// <summary>
-    /// Creates a new order with line items and updates inventory.
-    /// Converts order items to DataTable format for table-valued parameter in stored procedure.
-    /// The sp_CrearPedido procedure handles inventory updates and transaction management.
+    /// Crea un pedido y actualiza inventario mediante sp_CrearPedido.
     /// </summary>
-    /// <param name="dto">The order creation data containing client ID, user ID, and order items.</param>
-    /// <returns>The ID of the newly created order.</returns>
-    /// <remarks>
-    /// Important: The stored procedure sp_CrearPedido is responsible for:
-    /// 1. Creating the Pedidos record
-    /// 2. Creating PedidoDetalle records for each item
-    /// 3. Updating inventory via sp_ActualizarInventario
-    /// 4. Managing transaction rollback on any failure
-    /// </remarks>
     public async Task<int> CrearPedidoAsync(CreatePedidoDto dto)
     {
         // Build DataTable for table-valued parameter (TVP)
@@ -62,9 +48,8 @@ public class PedidoService : IPedidoService
     }
 
     /// <summary>
-    /// Retrieves all orders with basic information.
+    /// Obtiene todos los pedidos.
     /// </summary>
-    /// <returns>An enumerable collection of orders with ID, client, user, date, total, and status.</returns>
     public async Task<IEnumerable<object>> GetAllAsync()
     {
         var query = @"
@@ -75,10 +60,8 @@ public class PedidoService : IPedidoService
     }
 
     /// <summary>
-    /// Retrieves a specific order by ID with basic information.
+    /// Obtiene un pedido por ID.
     /// </summary>
-    /// <param name="id">The order identifier.</param>
-    /// <returns>The order if found; null otherwise.</returns>
     public async Task<object?> GetByIdAsync(int id)
     {
         var query = @"
@@ -90,16 +73,8 @@ public class PedidoService : IPedidoService
     }
 
     /// <summary>
-    /// Retrieves complete order details including client, user, and line items.
-    /// Uses QueryMultiple to execute two queries efficiently:
-    /// 1. Main order header with client and user information
-    /// 2. Order details (line items) with product information
+    /// Obtiene el detalle completo de un pedido con cliente, usuario y productos.
     /// </summary>
-    /// <param name="id">The order identifier.</param>
-    /// <returns>
-    /// PedidoDetalleResponseDto with complete order information including client, user, and items.
-    /// Returns null if order not found.
-    /// </returns>
     public async Task<PedidoDetalleResponseDto?> GetDetalleByIdAsync(int id)
     {
         var query = @"

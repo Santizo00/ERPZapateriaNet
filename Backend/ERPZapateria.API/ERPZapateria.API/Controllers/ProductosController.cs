@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ERPZapateria.API.Controllers;
 
 /// <summary>
-/// Controlador API para gestión de productos.
-/// Gestiona operaciones CRUD de productos con autenticación y autorización.
-/// Todos los endpoints requieren autenticación. Las operaciones de creación, actualización y eliminación requieren rol Admin.
+/// Controlador CRUD de productos.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -18,8 +16,6 @@ public class ProductosController : ControllerBase
 {
     private readonly IProductoService _productoService;
 
-    /// <summary>Inicializa una nueva instancia del controlador de productos.</summary>
-    /// <param name="productoService">Inyección del servicio de productos.</param>
     public ProductosController(IProductoService productoService)
     {
         _productoService = productoService;

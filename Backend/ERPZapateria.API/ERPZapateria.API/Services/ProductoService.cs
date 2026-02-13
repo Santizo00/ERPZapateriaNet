@@ -6,25 +6,20 @@ using System.Data;
 namespace ERPZapateria.API.Services;
 
 /// <summary>
-/// Service for managing products.
-/// Implements business logic for product CRUD operations.
-/// Uses Dapper ORM for database access.
+/// Servicio de gestion de productos.
 /// </summary>
 public class ProductoService : IProductoService
 {
     private readonly IDbConnection _connection;
 
-    /// <summary>Initializes a new instance of the ProductoService class.</summary>
-    /// <param name="connection">The database connection dependency.</param>
     public ProductoService(IDbConnection connection)
     {
         _connection = connection;
     }
 
     /// <summary>
-    /// Retrieves all active products with their available stock.
+    /// Obtiene todos los productos activos con stock.
     /// </summary>
-    /// <returns>An enumerable collection of active products.</returns>
     public async Task<IEnumerable<ProductoDto>> GetAllAsync()
     {
         var query = @"
@@ -38,10 +33,8 @@ public class ProductoService : IProductoService
     }
 
     /// <summary>
-    /// Retrieves a specific product by ID with its available stock.
+    /// Obtiene un producto por ID con stock.
     /// </summary>
-    /// <param name="id">The product identifier.</param>
-    /// <returns>The product if found; null otherwise.</returns>
     public async Task<ProductoDto?> GetByIdAsync(int id)
     {
         var query = @"
@@ -55,11 +48,8 @@ public class ProductoService : IProductoService
     }
 
     /// <summary>
-    /// Creates a new product with initial inventory.
-    /// Inserts product record and creates initial inventory entry.
+    /// Crea un nuevo producto con inventario inicial.
     /// </summary>
-    /// <param name="dto">The product creation data transfer object.</param>
-    /// <returns>The ID of the newly created product.</returns>
     public async Task<int> CreateAsync(CreateProductoDto dto)
     {
         var query = @"
@@ -115,10 +105,8 @@ public class ProductoService : IProductoService
     }
 
     /// <summary>
-    /// Performs a soft delete on a product by marking it as inactive.
+    /// Elimina un producto (marca como inactivo).
     /// </summary>
-    /// <param name="id">The product identifier to delete.</param>
-    /// <returns>True if the product was deleted; false if the product was not found.</returns>
     public async Task<bool> DeleteAsync(int id)
     {
         var query = @"

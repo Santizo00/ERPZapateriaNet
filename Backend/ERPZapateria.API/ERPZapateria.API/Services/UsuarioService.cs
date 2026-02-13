@@ -6,6 +6,9 @@ using BCrypt.Net;
 
 namespace ERPZapateria.API.Services;
 
+/// <summary>
+/// Servicio de gestion de usuarios.
+/// </summary>
 public class UsuarioService : IUsuarioService
 {
     private readonly IDbConnection _connection;

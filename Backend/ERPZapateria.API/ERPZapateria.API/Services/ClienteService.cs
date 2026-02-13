@@ -5,6 +5,9 @@ using System.Data;
 
 namespace ERPZapateria.API.Services;
 
+/// <summary>
+/// Servicio de gestion de clientes.
+/// </summary>
 public class ClienteService : IClienteService
 {
     private readonly IDbConnection _connection;

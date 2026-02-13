@@ -5,6 +5,9 @@ using System.Data;
 
 namespace ERPZapateria.API.Services;
 
+/// <summary>
+/// Servicio de gestion de roles.
+/// </summary>
 public class RolService : IRolService
 {
     private readonly IDbConnection _connection;

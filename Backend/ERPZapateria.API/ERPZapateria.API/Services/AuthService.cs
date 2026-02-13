@@ -9,18 +9,13 @@ using BCrypt.Net;
 namespace ERPZapateria.API.Services;
 
 /// <summary>
-/// Service for user authentication operations.
-/// Handles user login with password validation and JWT token generation.
-/// Implements password hashing with BCrypt for security.
+/// Servicio de autenticacion de usuarios.
 /// </summary>
 public class AuthService : IAuthService
 {
     private readonly IDbConnection _connection;
     private readonly IConfiguration _configuration;
 
-    /// <summary>Initializes a new instance of the AuthService class.</summary>
-    /// <param name="connection">The database connection dependency.</param>
-    /// <param name="configuration">The application configuration for JWT settings.</param>
     public AuthService(IDbConnection connection, IConfiguration configuration)
     {
         _connection = connection;
@@ -28,14 +23,8 @@ public class AuthService : IAuthService
     }
 
     /// <summary>
-    /// Authenticates a user with provided credentials and generates JWT token.
-    /// Validates password using BCrypt hash comparison.
+    /// Valida credenciales y genera token JWT.
     /// </summary>
-    /// <param name="request">The login request containing username and password.</param>
-    /// <returns>
-    /// LoginResponseDto with JWT token if credentials are valid;
-    /// null if username not found or password is incorrect.
-    /// </returns>
     public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
     {
         var parameters = new DynamicParameters();
