@@ -24,6 +24,8 @@ export const ProductosPage = () => {
   const [searchId, setSearchId] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Producto | null>(null)
+  const [precioInput, setPrecioInput] = useState('')
+  const [stockInput, setStockInput] = useState('')
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
@@ -137,6 +139,8 @@ export const ProductosPage = () => {
   const openCreateModal = () => {
     setEditingProduct(null)
     setFormData({ nombre: '', descripcion: '', precio: 0, stock: 0 })
+    setPrecioInput('')
+    setStockInput('')
     setShowModal(true)
   }
 
@@ -148,7 +152,43 @@ export const ProductosPage = () => {
       precio: producto.precio,
       stock: producto.stockDisponible,
     })
+    setPrecioInput(producto.precio.toFixed(2))
+    setStockInput(String(producto.stockDisponible))
     setShowModal(true)
+  }
+
+  const handlePrecioChange = (value: string) => {
+    const trimmed = value.trim()
+    if (!trimmed) {
+      setPrecioInput('')
+      setFormData({ ...formData, precio: 0 })
+      return
+    }
+
+    const valid = /^\d+(\.\d{0,2})?$/.test(trimmed)
+    if (!valid) return
+
+    setPrecioInput(trimmed)
+    const parsed = Number(trimmed)
+    if (!Number.isNaN(parsed)) {
+      setFormData({ ...formData, precio: parsed })
+    }
+  }
+
+  const handleStockChange = (value: string) => {
+    const trimmed = value.trim()
+    if (!trimmed) {
+      setStockInput('')
+      setFormData({ ...formData, stock: 0 })
+      return
+    }
+
+    const valid = /^\d+$/.test(trimmed)
+    if (!valid) return
+
+    setStockInput(trimmed)
+    const parsed = parseInt(trimmed, 10)
+    setFormData({ ...formData, stock: parsed })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,7 +206,7 @@ export const ProductosPage = () => {
       return
     }
 
-    if (formData.precio <= 0) {
+    if (!precioInput || formData.precio <= 0) {
       await Swal.fire({
         icon: 'warning',
         title: 'Validación',
@@ -178,7 +218,7 @@ export const ProductosPage = () => {
       return
     }
 
-    if (formData.stock < 0) {
+    if (!stockInput || formData.stock < 0) {
       await Swal.fire({
         icon: 'warning',
         title: 'Validación',
@@ -233,15 +273,16 @@ export const ProductosPage = () => {
 
   return (
     <DashboardLayout title="Productos">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="productos-page" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Búsqueda y Botón Crear */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div className="productos-toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <input
             type="number"
             placeholder="Buscar por ID..."
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="productos-search-input"
             style={{
               flex: 1,
               backgroundColor: '#1a1714',
@@ -254,6 +295,7 @@ export const ProductosPage = () => {
           />
           <button
             onClick={handleSearch}
+            className="productos-search-button"
             style={{
               backgroundColor: '#8b7355',
               border: 'none',
@@ -274,6 +316,7 @@ export const ProductosPage = () => {
           {isAdmin && (
             <button
                 onClick={openCreateModal}
+                className="productos-create-button"
                 style={{
                 backgroundColor: '#c2783c',
                 border: 'none',
@@ -299,8 +342,9 @@ export const ProductosPage = () => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: '#8b7355' }}>Cargando...</div>
         ) : productos.length > 0 ? (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="productos-table-wrapper" style={{ overflowX: 'auto' }}>
             <table
+              className="productos-table"
               style={{
                 width: '100%',
                 borderCollapse: 'collapse',
@@ -333,22 +377,23 @@ export const ProductosPage = () => {
               <tbody>
                 {productos.map((producto) => (
                   <tr key={producto.idProducto} style={{ borderBottom: '1px solid #2a2420' }}>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>{producto.idProducto}</td>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>{producto.nombre}</td>
-                    <td style={{ padding: '12px 16px', color: '#8b7355', fontSize: '13px' }}>
+                    <td data-label="ID" style={{ padding: '12px 16px', color: '#ede8df' }}>{producto.idProducto}</td>
+                    <td data-label="Nombre" style={{ padding: '12px 16px', color: '#ede8df' }}>{producto.nombre}</td>
+                    <td data-label="Descripción" style={{ padding: '12px 16px', color: '#8b7355', fontSize: '13px' }}>
                       {producto.descripcion || '-'}
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#c2783c', textAlign: 'center', fontWeight: 600 }}>
+                    <td data-label="Precio (Q)" style={{ padding: '12px 16px', color: '#c2783c', textAlign: 'center', fontWeight: 600 }}>
                       Q{producto.precio.toFixed(2)}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#ede8df' }}>
+                    <td data-label="Stock" style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#ede8df' }}>
                       {producto.stockDisponible}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                    <td data-label="Acciones" style={{ padding: '12px 16px', textAlign: 'center' }}>
                         {isAdmin && (
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                            <div className="productos-actions" style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
                             <button
                                 onClick={() => openEditModal(producto)}
+                                className="productos-action-button"
                                 style={{
                                 backgroundColor: '#8b7355',
                                 border: 'none',
@@ -370,6 +415,7 @@ export const ProductosPage = () => {
                                 onClick={() =>
                                 handleDelete(producto.idProducto, producto.nombre)
                                 }
+                              className="productos-action-button"
                                 style={{
                                 backgroundColor: '#d32f2f',
                                 border: 'none',
@@ -413,6 +459,7 @@ export const ProductosPage = () => {
       {/* Modal */}
       {showModal && (
         <div
+          className="productos-modal"
           style={{
             position: 'fixed',
             top: 0,
@@ -428,6 +475,7 @@ export const ProductosPage = () => {
           onClick={() => setShowModal(false)}
         >
           <div
+            className="productos-modal-card"
             style={{
               backgroundColor: '#1a1714',
               border: '1px solid #2a2420',
@@ -488,10 +536,11 @@ export const ProductosPage = () => {
                   Precio (Q) *
                 </label>
                 <input
-                  type="number"
-                  step="0.01"
-                  value={formData.precio}
-                  onChange={(e) => setFormData({ ...formData, precio: parseFloat(e.target.value) || 0 })}
+                  type="text"
+                  inputMode="decimal"
+                  pattern="^\d*(\.\d{0,2})?$"
+                  value={precioInput}
+                  onChange={(e) => handlePrecioChange(e.target.value)}
                   placeholder="0.00"
                   style={{
                     width: '100%',
@@ -509,9 +558,11 @@ export const ProductosPage = () => {
                   Stock *
                 </label>
                 <input
-                  type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="^\d+$"
+                  value={stockInput}
+                  onChange={(e) => handleStockChange(e.target.value)}
                   placeholder="0"
                   style={{
                     width: '100%',

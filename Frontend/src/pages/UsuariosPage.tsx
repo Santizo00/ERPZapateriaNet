@@ -257,14 +257,15 @@ export const UsuariosPage = () => {
 
   return (
     <DashboardLayout title="Usuarios">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <div className="usuarios-page" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="usuarios-toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <input
             type="number"
             placeholder="Buscar por ID..."
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="usuarios-search-input"
             style={{
               flex: 1,
               backgroundColor: '#1a1714',
@@ -277,6 +278,7 @@ export const UsuariosPage = () => {
           />
           <button
             onClick={handleSearch}
+            className="usuarios-search-button"
             style={{
               backgroundColor: '#8b7355',
               border: 'none',
@@ -296,6 +298,7 @@ export const UsuariosPage = () => {
           </button>
           <button
             onClick={openCreateModal}
+            className="usuarios-create-button"
             style={{
               backgroundColor: '#c2783c',
               border: 'none',
@@ -318,8 +321,9 @@ export const UsuariosPage = () => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: '#8b7355' }}>Cargando...</div>
         ) : usuarios.length > 0 ? (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="usuarios-table-wrapper" style={{ overflowX: 'auto' }}>
             <table
+              className="usuarios-table"
               style={{
                 width: '100%',
                 borderCollapse: 'collapse',
@@ -342,10 +346,10 @@ export const UsuariosPage = () => {
               <tbody>
                 {usuarios.map((usuario) => (
                   <tr key={usuario.idUsuario} style={{ borderBottom: '1px solid #2a2420' }}>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>{usuario.idUsuario}</td>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>{usuario.username}</td>
-                    <td style={{ padding: '12px 16px', color: '#8b7355' }}>{usuario.rol || '-'}</td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                    <td data-label="ID" style={{ padding: '12px 16px', color: '#ede8df' }}>{usuario.idUsuario}</td>
+                    <td data-label="Usuario" style={{ padding: '12px 16px', color: '#ede8df' }}>{usuario.username}</td>
+                    <td data-label="Rol" style={{ padding: '12px 16px', color: '#8b7355' }}>{usuario.rol || '-'}</td>
+                    <td data-label="Estado" style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <span
                         style={{
                           backgroundColor: usuario.activo ? '#2d5f2e' : '#6b7280',
@@ -359,13 +363,14 @@ export const UsuariosPage = () => {
                         {usuario.activo ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#ede8df', textAlign: 'center', fontSize: '13px' }}>
+                    <td data-label="Creado" style={{ padding: '12px 16px', color: '#ede8df', textAlign: 'center', fontSize: '13px' }}>
                       {usuario.fechaCreacion ? new Date(usuario.fechaCreacion).toLocaleDateString('es-GT') : '-'}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <td data-label="Acciones" style={{ padding: '12px 16px', textAlign: 'center' }}>
+                      <div className="usuarios-actions" style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
                         <button
                           onClick={() => openEditModal(usuario)}
+                          className="usuarios-action-button"
                           style={{
                             backgroundColor: '#8b7355',
                             border: 'none',
@@ -384,6 +389,7 @@ export const UsuariosPage = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(usuario.idUsuario, usuario.username)}
+                          className="usuarios-action-button"
                           style={{
                             backgroundColor: '#d32f2f',
                             border: 'none',
@@ -425,6 +431,7 @@ export const UsuariosPage = () => {
 
       {showModal && (
         <div
+          className="usuarios-modal"
           style={{
             position: 'fixed',
             top: 0,
@@ -440,6 +447,7 @@ export const UsuariosPage = () => {
           onClick={() => setShowModal(false)}
         >
           <div
+            className="usuarios-modal-card"
             style={{
               backgroundColor: '#1a1714',
               border: '1px solid #2a2420',

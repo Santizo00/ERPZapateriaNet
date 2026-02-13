@@ -85,10 +85,6 @@ export const DashboardPage = () => {
               <span style={{ color: '#8b7355' }}>Validación de Token:</span>
               <span style={{ color: '#c2783c', fontWeight: 600 }}>✓ Activo</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px' }}>
-              <span style={{ color: '#8b7355' }}>Sesión Sincronizada:</span>
-              <span style={{ color: '#c2783c', fontWeight: 600 }}>✓ Entre pestañas</span>
-            </div>
           </div>
         </div>
 
@@ -106,7 +102,6 @@ export const DashboardPage = () => {
           </p>
           <p style={{ color: '#8b7355', margin: 0, fontSize: '13px' }}>
             Tu sesión se valida automáticamente con JWT en cada solicitud. Si intentas navegar sin autenticación, serás redirigido a login.
-            Tu sesión también se sincroniza entre todas las pestañas abiertas.
           </p>
         </div>
       </div>

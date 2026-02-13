@@ -2,7 +2,7 @@ import { useAuthStore } from '../stores/authStore'
 import { LogOut, Home, Package, ShoppingCart, Users, Menu, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -17,6 +17,19 @@ export const DashboardLayout = ({ children, title }: LayoutProps) => {
   const { usuario, logout } = useAuthStore()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 900
+      setIsMobile(mobile)
+      setSidebarOpen(!mobile)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Manejar logout con confirmación
   const handleLogout = async () => {
@@ -62,19 +75,9 @@ export const DashboardLayout = ({ children, title }: LayoutProps) => {
   const filteredMenuItems = menuItems.filter((item) => item.roles.includes(userRole))
 
   return (
-    <div style={{ display: 'flex', height: '100vh', backgroundColor: '#0f0d0a' }}>
+    <div className="dashboard-shell">
       {/* Sidebar */}
-      <aside
-        style={{
-          width: sidebarOpen ? '250px' : '0',
-          backgroundColor: '#1a1714',
-          borderRight: '1px solid #2a2420',
-          transition: 'width 0.3s ease',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <aside className={`dashboard-sidebar ${sidebarOpen ? 'is-open' : ''}`}>
         {/* Logo */}
         <div
           style={{
@@ -162,8 +165,16 @@ export const DashboardLayout = ({ children, title }: LayoutProps) => {
         </div>
       </aside>
 
+      {isMobile && sidebarOpen && (
+        <button
+          className="dashboard-overlay"
+          aria-label="Cerrar menu"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Contenido Principal */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div className="dashboard-main">
         {/* Navbar */}
         <header
           style={{
@@ -178,15 +189,8 @@ export const DashboardLayout = ({ children, title }: LayoutProps) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              style={{
-                backgroundColor: 'transparent',
-                border: 'none',
-                color: '#c2783c',
-                cursor: 'pointer',
-                padding: '8px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className="dashboard-menu-toggle"
+              aria-label={sidebarOpen ? 'Cerrar menu' : 'Abrir menu'}
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

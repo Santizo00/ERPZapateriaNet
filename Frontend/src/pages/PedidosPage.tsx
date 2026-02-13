@@ -233,6 +233,30 @@ export const PedidosPage = () => {
     const producto = productos.find((p) => p.idProducto === selectedProducto)
     if (!producto) return
 
+    if (producto.stockDisponible <= 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Stock insuficiente',
+        text: 'No se pudo agregar el producto porque no hay existencia disponible',
+        confirmButtonColor: '#c2783c',
+        background: '#1a1714',
+        color: '#ede8df',
+      })
+      return
+    }
+
+    if (cantidad > producto.stockDisponible) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Stock insuficiente',
+        text: `La cantidad solicitada supera el stock disponible (${producto.stockDisponible})`,
+        confirmButtonColor: '#c2783c',
+        background: '#1a1714',
+        color: '#ede8df',
+      })
+      return
+    }
+
     // Verificar si ya existe el producto en el detalle
     const existe = formData.detalle.find((d) => d.idProducto === selectedProducto)
     if (existe) {
@@ -302,6 +326,34 @@ export const PedidosPage = () => {
       return
     }
 
+    const productoById = new Map(productos.map((p) => [p.idProducto, p]))
+    for (const item of formData.detalle) {
+      const producto = productoById.get(item.idProducto)
+      if (!producto || producto.stockDisponible <= 0) {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Stock insuficiente',
+          text: `No hay existencia disponible para el producto ${item.nombreProducto}`,
+          confirmButtonColor: '#c2783c',
+          background: '#1a1714',
+          color: '#ede8df',
+        })
+        return
+      }
+
+      if (item.cantidad > producto.stockDisponible) {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Stock insuficiente',
+          text: `La cantidad de ${item.nombreProducto} supera el stock disponible (${producto.stockDisponible})`,
+          confirmButtonColor: '#c2783c',
+          background: '#1a1714',
+          color: '#ede8df',
+        })
+        return
+      }
+    }
+
     try {
       const payload = {
         idCliente: formData.idCliente,
@@ -327,10 +379,15 @@ export const PedidosPage = () => {
       setShowModal(false)
       loadPedidos()
     } catch (error: any) {
+      const apiMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.Detail ||
+        error.response?.data?.message ||
+        'Error al crear pedido'
       await Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: error.response?.data?.message || 'Error al crear pedido',
+        text: apiMessage,
         confirmButtonColor: '#c2783c',
         background: '#1a1714',
         color: '#ede8df',
@@ -340,15 +397,16 @@ export const PedidosPage = () => {
 
   return (
     <DashboardLayout title="Pedidos">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="pedidos-page" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Búsqueda y Botón Crear */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div className="pedidos-toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <input
             type="number"
             placeholder="Buscar por ID..."
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="pedidos-search-input"
             style={{
               flex: 1,
               backgroundColor: '#1a1714',
@@ -361,6 +419,7 @@ export const PedidosPage = () => {
           />
           <button
             onClick={handleSearch}
+            className="pedidos-search-button"
             style={{
               backgroundColor: '#8b7355',
               border: 'none',
@@ -380,6 +439,7 @@ export const PedidosPage = () => {
           </button>
           <button
             onClick={openCreateModal}
+            className="pedidos-create-button"
             style={{
               backgroundColor: '#c2783c',
               border: 'none',
@@ -403,8 +463,9 @@ export const PedidosPage = () => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: '#8b7355' }}>Cargando...</div>
         ) : pedidos.length > 0 ? (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="pedidos-table-wrapper" style={{ overflowX: 'auto' }}>
             <table
+              className="pedidos-table"
               style={{
                 width: '100%',
                 borderCollapse: 'collapse',
@@ -440,18 +501,18 @@ export const PedidosPage = () => {
               <tbody>
                 {pedidos.map((pedido) => (
                   <tr key={pedido.idPedido} style={{ borderBottom: '1px solid #2a2420' }}>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>{pedido.idPedido}</td>
-                    <td style={{ padding: '12px 16px', color: '#ede8df' }}>Cliente #{pedido.idCliente}</td>
-                    <td style={{ padding: '12px 16px', color: '#8b7355', fontSize: '13px' }}>
+                    <td data-label="ID" style={{ padding: '12px 16px', color: '#ede8df' }}>{pedido.idPedido}</td>
+                    <td data-label="Cliente" style={{ padding: '12px 16px', color: '#ede8df' }}>Cliente #{pedido.idCliente}</td>
+                    <td data-label="Usuario" style={{ padding: '12px 16px', color: '#8b7355', fontSize: '13px' }}>
                       Usuario #{pedido.idUsuario}
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#ede8df', textAlign: 'center', fontSize: '13px' }}>
+                    <td data-label="Fecha" style={{ padding: '12px 16px', color: '#ede8df', textAlign: 'center', fontSize: '13px' }}>
                       {new Date(pedido.fecha).toLocaleDateString('es-GT')}
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#c2783c', textAlign: 'center', fontWeight: 600 }}>
+                    <td data-label="Total (Q)" style={{ padding: '12px 16px', color: '#c2783c', textAlign: 'center', fontWeight: 600 }}>
                       Q{pedido.total.toFixed(2)}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                    <td data-label="Estado" style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <span
                         style={{
                           backgroundColor: pedido.estado === 'Completado' ? '#2d5f2e' : '#8b7355',
@@ -465,10 +526,11 @@ export const PedidosPage = () => {
                         {pedido.estado}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                    <td data-label="Acciones" style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <button
                         onClick={() => handleViewDetail(pedido.idPedido)}
                         disabled={loadingDetail}
+                        className="pedidos-action-button"
                         style={{
                           backgroundColor: '#8b7355',
                           border: 'none',
@@ -508,6 +570,7 @@ export const PedidosPage = () => {
       {/* Modal */}
       {showModal && (
         <div
+          className="pedidos-modal"
           style={{
             position: 'fixed',
             top: 0,
@@ -525,6 +588,7 @@ export const PedidosPage = () => {
           onClick={() => setShowModal(false)}
         >
           <div
+            className="pedidos-modal-card"
             style={{
               backgroundColor: '#1a1714',
               border: '1px solid #2a2420',
@@ -573,6 +637,7 @@ export const PedidosPage = () => {
 
               {/* Agregar Productos */}
               <div
+                className="pedidos-add-section"
                 style={{
                   backgroundColor: '#242220',
                   border: '1px solid #3a3430',
@@ -583,7 +648,7 @@ export const PedidosPage = () => {
                 <h3 style={{ color: '#c2783c', fontSize: '16px', marginTop: 0, marginBottom: '12px' }}>
                   Agregar Productos
                 </h3>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'end' }}>
+                <div className="pedidos-add-row" style={{ display: 'flex', gap: '12px', alignItems: 'end' }}>
                   <div style={{ flex: 2 }}>
                     <label style={{ color: '#ede8df', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
                       Producto
@@ -632,6 +697,7 @@ export const PedidosPage = () => {
                   <button
                     type="button"
                     onClick={agregarProducto}
+                    className="pedidos-add-button"
                     style={{
                       backgroundColor: '#8b7355',
                       border: 'none',
@@ -656,6 +722,7 @@ export const PedidosPage = () => {
                     Detalle del Pedido
                   </h3>
                   <table
+                    className="pedidos-detail-table"
                     style={{
                       width: '100%',
                       borderCollapse: 'collapse',
@@ -687,16 +754,17 @@ export const PedidosPage = () => {
                     <tbody>
                       {formData.detalle.map((item) => (
                         <tr key={item.idProducto} style={{ borderTop: '1px solid #3a3430' }}>
-                          <td style={{ padding: '8px', color: '#ede8df', fontSize: '13px' }}>
+                          <td data-label="Producto" style={{ padding: '8px', color: '#ede8df', fontSize: '13px' }}>
                             {item.nombreProducto}
                           </td>
-                          <td style={{ padding: '8px', textAlign: 'center', color: '#ede8df', fontSize: '13px' }}>
+                          <td data-label="Cantidad" style={{ padding: '8px', textAlign: 'center', color: '#ede8df', fontSize: '13px' }}>
                             {item.cantidad}
                           </td>
-                          <td style={{ padding: '8px', textAlign: 'center', color: '#c2783c', fontSize: '13px' }}>
+                          <td data-label="Precio" style={{ padding: '8px', textAlign: 'center', color: '#c2783c', fontSize: '13px' }}>
                             Q{item.precioUnitario.toFixed(2)}
                           </td>
                           <td
+                            data-label="Subtotal"
                             style={{
                               padding: '8px',
                               textAlign: 'center',
@@ -707,7 +775,7 @@ export const PedidosPage = () => {
                           >
                             Q{item.subtotal.toFixed(2)}
                           </td>
-                          <td style={{ padding: '8px', textAlign: 'center' }}>
+                          <td data-label="Accion" style={{ padding: '8px', textAlign: 'center' }}>
                             <button
                               type="button"
                               onClick={() => eliminarProducto(item.idProducto)}
@@ -795,6 +863,7 @@ export const PedidosPage = () => {
 
       {showDetailModal && detailData && (
         <div
+          className="pedidos-modal"
           style={{
             position: 'fixed',
             top: 0,
@@ -812,6 +881,7 @@ export const PedidosPage = () => {
           onClick={() => setShowDetailModal(false)}
         >
           <div
+            className="pedidos-modal-card"
             style={{
               backgroundColor: '#1a1714',
               border: '1px solid #2a2420',
@@ -857,8 +927,9 @@ export const PedidosPage = () => {
               </div>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
+            <div className="pedidos-table-wrapper" style={{ overflowX: 'auto' }}>
               <table
+                className="pedidos-view-table"
                 style={{
                   width: '100%',
                   borderCollapse: 'collapse',
@@ -879,12 +950,12 @@ export const PedidosPage = () => {
                 <tbody>
                   {detailData.detalle.map((item) => (
                     <tr key={item.idProducto} style={{ borderTop: '1px solid #3a3430' }}>
-                      <td style={{ padding: '10px', color: '#ede8df', fontSize: '13px' }}>{item.productoNombre}</td>
-                      <td style={{ padding: '10px', textAlign: 'center', color: '#ede8df', fontSize: '13px' }}>{item.cantidad}</td>
-                      <td style={{ padding: '10px', textAlign: 'center', color: '#c2783c', fontSize: '13px' }}>
+                      <td data-label="Producto" style={{ padding: '10px', color: '#ede8df', fontSize: '13px' }}>{item.productoNombre}</td>
+                      <td data-label="Cantidad" style={{ padding: '10px', textAlign: 'center', color: '#ede8df', fontSize: '13px' }}>{item.cantidad}</td>
+                      <td data-label="Precio" style={{ padding: '10px', textAlign: 'center', color: '#c2783c', fontSize: '13px' }}>
                         Q{item.precioUnitario.toFixed(2)}
                       </td>
-                      <td style={{ padding: '10px', textAlign: 'center', color: '#c2783c', fontWeight: 600, fontSize: '13px' }}>
+                      <td data-label="Subtotal" style={{ padding: '10px', textAlign: 'center', color: '#c2783c', fontWeight: 600, fontSize: '13px' }}>
                         Q{item.subtotal.toFixed(2)}
                       </td>
                     </tr>
