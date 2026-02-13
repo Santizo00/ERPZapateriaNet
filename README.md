@@ -15,6 +15,14 @@ La base de datos se encuentra en la carpeta DataBase y esta pensada para SQL Ser
 ```
 ERPZapateriaNet/
 ├─ Backend/
+│   └─ ERPZapateria.Application/      # Capa de aplicación (DTOs, Interfaces, Common)
+│       ├─ Common/                    # Clases compartidas y utilidades
+│       ├─ DTOs/                      # Data Transfer Objects
+│       │   ├─ Auth/                  # DTOs de autenticación
+│       │   ├─ Producto/              # DTOs de productos
+│       │   └─ Pedido/                # DTOs de pedidos
+│       ├─ Interfaces/                # Interfaces de servicios
+│       └─ README.md                  # Documentación del proyecto Application
 │
 ├─ DataBase/
 │   ├─ 01_Schema.sql                  # Esquema general de la base de datos
