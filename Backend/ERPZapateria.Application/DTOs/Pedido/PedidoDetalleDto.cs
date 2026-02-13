@@ -1,17 +1,16 @@
 namespace ERPZapateria.Application.DTOs.Pedido;
 
 /// <summary>
-/// DTO para detalles de línea de pedido.
-/// Representa un producto individual en un pedido.
+/// Item individual de un pedido.
 /// </summary>
 public class PedidoDetalleDto
 {
-    /// <summary>Identificador del producto. Campo requerido.</summary>
+    /// <summary>ID del producto.</summary>
     public int IdProducto { get; set; }
 
-    /// <summary>Cantidad solicitada. Debe ser mayor que cero.</summary>
+    /// <summary>Cantidad solicitada.</summary>
     public int Cantidad { get; set; }
 
-    /// <summary>Precio unitario en el momento del pedido.</summary>
+    /// <summary>Precio unitario del producto.</summary>
     public decimal PrecioUnitario { get; set; }
 }

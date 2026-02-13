@@ -1,17 +1,16 @@
 namespace ERPZapateria.Application.DTOs.Rol;
 
 /// <summary>
-/// DTO para información de roles.
-/// Representa un rol de usuario con permisos en el sistema.
+/// Informacion de un rol del sistema.
 /// </summary>
 public class RolDto
 {
-    /// <summary>Identificador del rol.</summary>
+    /// <summary>ID del rol.</summary>
     public int IdRol { get; set; }
 
-    /// <summary>Nombre del rol (ej: Admin, Vendedor).</summary>
+    /// <summary>Nombre del rol (Admin, Vendedor).</summary>
     public string Nombre { get; set; } = string.Empty;
 
-    /// <summary>Indica si el rol está activo.</summary>
+    /// <summary>Indica si esta activo.</summary>
     public bool Activo { get; set; }
 }

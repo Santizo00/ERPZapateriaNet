@@ -1,20 +1,19 @@
 namespace ERPZapateria.Application.DTOs.Usuario;
 
 /// <summary>
-/// DTO para crear un nuevo usuario.
-/// Contiene credenciales y asignación de rol para la creación de nueva cuenta.
+/// Datos para crear un nuevo usuario.
 /// </summary>
 public class CreateUsuarioDto
 {
-    /// <summary>Nombre de usuario. Debe ser único. Campo requerido.</summary>
+    /// <summary>Nombre de usuario (unico).</summary>
     public string Username { get; set; } = string.Empty;
 
-    /// <summary>Contraseña del usuario. Será hasheada con BCrypt. Campo requerido.</summary>
+    /// <summary>Contraseña (se hashea con BCrypt).</summary>
     public string Password { get; set; } = string.Empty;
 
-    /// <summary>Identificador del rol. Campo requerido.</summary>
+    /// <summary>ID del rol a asignar.</summary>
     public int IdRol { get; set; }
 
-    /// <summary>Indica si el usuario está inicialmente activo. Por defecto es verdadero.</summary>
+    /// <summary>Indica si esta activo al crear.</summary>
     public bool Activo { get; set; } = true;
 }

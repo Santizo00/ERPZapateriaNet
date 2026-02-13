@@ -1,12 +1,11 @@
 namespace ERPZapateria.Application.DTOs.Pedido;
 
 /// <summary>
-/// Representa un artículo individual del detalle de un pedido.
-/// Contiene información del producto y subtotal calculado.
+/// Item individual del detalle de un pedido con informacion de producto.
 /// </summary>
 public class PedidoDetalleItemDto
 {
-    /// <summary>Identificador del producto.</summary>
+    /// <summary>ID del producto.</summary>
     public int IdProducto { get; set; }
 
     /// <summary>Nombre del producto.</summary>
@@ -15,9 +14,9 @@ public class PedidoDetalleItemDto
     /// <summary>Cantidad solicitada.</summary>
     public int Cantidad { get; set; }
 
-    /// <summary>Precio unitario en el momento del pedido.</summary>
+    /// <summary>Precio unitario.</summary>
     public decimal PrecioUnitario { get; set; }
 
-    /// <summary>Subtotal calculado (Cantidad × PrecioUnitario).</summary>
+    /// <summary>Subtotal (Cantidad × PrecioUnitario).</summary>
     public decimal Subtotal { get; set; }
 }

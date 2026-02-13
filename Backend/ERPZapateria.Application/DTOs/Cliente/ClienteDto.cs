@@ -1,29 +1,28 @@
 namespace ERPZapateria.Application.DTOs.Cliente;
 
 /// <summary>
-/// DTO para información de clientes.
-/// Contiene todos los detalles del cliente para visualización y gestión.
+/// Informacion de un cliente.
 /// </summary>
 public class ClienteDto
 {
-    /// <summary>Identificador del cliente.</summary>
+    /// <summary>ID del cliente.</summary>
     public int IdCliente { get; set; }
 
     /// <summary>Nombre del cliente.</summary>
     public string Nombre { get; set; } = string.Empty;
 
-    /// <summary>NIT del cliente (identificación tributaria).</summary>
+    /// <summary>NIT del cliente.</summary>
     public string? NIT { get; set; }
 
-    /// <summary>Correo electrónico del cliente.</summary>
+    /// <summary>Correo electronico.</summary>
     public string? Email { get; set; }
 
-    /// <summary>Número de teléfono del cliente.</summary>
+    /// <summary>Numero de telefono.</summary>
     public string? Telefono { get; set; }
 
-    /// <summary>Dirección del cliente.</summary>
+    /// <summary>Dirección.</summary>
     public string? Direccion { get; set; }
 
-    /// <summary>Indica si el cliente está activo.</summary>
+    /// <summary>Indica si esta activo.</summary>
     public bool Activo { get; set; }
 }

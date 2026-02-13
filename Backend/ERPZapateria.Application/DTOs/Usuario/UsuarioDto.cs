@@ -1,26 +1,25 @@
 namespace ERPZapateria.Application.DTOs.Usuario;
 
 /// <summary>
-/// DTO para información del usuario.
-/// Se utiliza para transferir datos del usuario sin incluir información sensible de contraseña.
+/// Informacion de un usuario del sistema.
 /// </summary>
 public class UsuarioDto
 {
-    /// <summary>Identificador del usuario.</summary>
+    /// <summary>ID del usuario.</summary>
     public int IdUsuario { get; set; }
 
     /// <summary>Nombre de usuario.</summary>
     public string Username { get; set; } = string.Empty;
 
-    /// <summary>Identificador del rol.</summary>
+    /// <summary>ID del rol.</summary>
     public int IdRol { get; set; }
 
     /// <summary>Nombre del rol.</summary>
     public string Rol { get; set; } = string.Empty;
 
-    /// <summary>Indica si el usuario está activo.</summary>
+    /// <summary>Indica si esta activo.</summary>
     public bool Activo { get; set; }
 
-    /// <summary>Fecha de creación del usuario.</summary>
+    /// <summary>Fecha de creacion.</summary>
     public DateTime FechaCreacion { get; set; }
 }
